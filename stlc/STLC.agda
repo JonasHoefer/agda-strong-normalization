@@ -17,3 +17,12 @@ open import Reduction
 
 module STLC where
 
+-- The logical predicate for strong normalization.
+⟦_∶_⟧ : (Γ : Ctx) (τ : Type) → Γ ⊢ τ → Set
+⟦ Γ ∶ ⋆ ⟧     t = SN t
+⟦ Γ ∶ τ ⇒ σ ⟧ t = {Δ : Ctx} (ρ : Renaming Γ Δ) (u : Δ ⊢ τ) → ⟦ Δ ∶ τ ⟧ u → ⟦ Δ ∶ σ ⟧ (ρ ⟪ t ⟫ ∙ u)
+
+-- The extension to contexts
+⟦_⟧ : (Γ : Ctx) {Δ : Ctx} → Subst Γ Δ → Set
+⟦ Γ ⟧ {Δ = Δ} σ = {τ : Type} (x : Γ ∋ τ) → ⟦ Δ ∶ τ ⟧ (σ ⟨ x ⟩ˢ)
+
