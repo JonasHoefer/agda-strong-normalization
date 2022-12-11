@@ -2,7 +2,7 @@ name: basic
 on: [push]
 jobs:
   check:
-    name: Check hello-world-dep.agda
+    name: Check STLC.agda
     runs-on: ubuntu-latest # or macOS-latest, or windows-latest
     steps:
       - uses: actions/checkout@v3
@@ -12,4 +12,9 @@ jobs:
           agda-stdlib-version: 'recommended'
       - run: |
           cd stlc
-          agda STLC.agda
+          agda --html STLC.agda
+      - name: Deploy html to github pages
+            uses: peaceiris/actions-gh-pages@v3
+            with:
+              github_token: ${{ secrets.GITHUB_TOKEN }}
+              publish_dir: stlc/html
