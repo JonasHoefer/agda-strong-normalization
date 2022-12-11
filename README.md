@@ -1,2 +1,2 @@
-# Strong Normalization of the Simply Typed Lambda Calculus in Agda
+# Strong Normalization of the STLC in Agda
 
