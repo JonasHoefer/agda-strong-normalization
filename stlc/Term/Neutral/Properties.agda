@@ -29,3 +29,7 @@ NE⊆SN-∙ t s t∈NE (sn-× p q) = sn λ where -- note that t∈NE limits the 
 NE⊆SN : (t : Γ ⊢ τ) → NE t → SN t
 NE⊆SN (var x) (var x)       = sn λ where u ()
 NE⊆SN (t ∙ s) (t∈NE ∙ s∈SN) = NE⊆SN-∙ t s t∈NE (sn-×-acc t s (NE⊆SN t t∈NE) s∈SN)
+
+renaming-NE : (ρ : Renaming Γ Δ) (t : Γ ⊢ τ) → NE t → NE (ρ ⟪ t ⟫)
+renaming-NE ρ (var x) (var x)       = var (ρ ⟨ x ⟩)
+renaming-NE ρ (t ∙ u) (t∈NE ∙ u∈SN) = renaming-NE ρ t t∈NE ∙ renaming-SN ρ u u∈SN

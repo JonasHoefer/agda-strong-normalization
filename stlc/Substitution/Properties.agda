@@ -149,9 +149,9 @@ exts-id : (Γ : Ctx) → exts (idˢ Γ) ≡ idˢ (Γ , τ)
 exts-id ∅       = refl
 exts-id (Γ , _) = refl
 
-ext-◆ : (σ₂ : Subst Γ Δ) (σ₁ : Subst Ω Γ) → exts {τ = τ} (σ₂ ◆ σ₁) ≡ exts σ₂ ◆ exts σ₁
-ext-◆ σ₂ ∅        = refl
-ext-◆ σ₂ (t ∷ σ₁) = cong₂ _∷_ refl (cong₂ _∷_ (ren⟪σ⟪t⟫ˢ⟫≡σ⟪ren⟪t⟫⟫ˢ σ₂ t) (suc-subst-◆ σ₂ σ₁))
+exts-◆ : (σ₂ : Subst Γ Δ) (σ₁ : Subst Ω Γ) → exts {τ = τ} (σ₂ ◆ σ₁) ≡ exts σ₂ ◆ exts σ₁
+exts-◆ σ₂ ∅        = refl
+exts-◆ σ₂ (t ∷ σ₁) = cong₂ _∷_ refl (cong₂ _∷_ (ren⟪σ⟪t⟫ˢ⟫≡σ⟪ren⟪t⟫⟫ˢ σ₂ t) (suc-subst-◆ σ₂ σ₁))
 
 subst-idⱽ : (x : Γ ∋ τ) → idˢ Γ ⟨ x ⟩ˢ ≡ var x
 subst-idⱽ Z     = refl
@@ -180,7 +180,7 @@ subst-◆ⱽ σ₂ (t ∷ σ₁) (S x) = subst-◆ⱽ σ₂ σ₁ x
 subst-◆ : (σ₂ : Subst Δ Ω) (σ₁ : Subst Γ Δ) (t : Γ ⊢ τ) → σ₂ ◆ σ₁ ⟪ t ⟫ˢ ≡ σ₂ ⟪ σ₁ ⟪ t ⟫ˢ ⟫ˢ
 subst-◆ σ₂ σ₁ (var x) = subst-◆ⱽ σ₂ σ₁ x
 subst-◆ σ₂ σ₁ (s ∙ t) = cong₂ _∙_ (subst-◆ σ₂ σ₁ s) (subst-◆ σ₂ σ₁ t)
-subst-◆ σ₂ σ₁ (abs t) = cong abs (trans ((cong (_⟪ t ⟫ˢ)) (ext-◆ σ₂ σ₁)) (subst-◆ (exts σ₂) (exts σ₁) t))
+subst-◆ σ₂ σ₁ (abs t) = cong abs (trans ((cong (_⟪ t ⟫ˢ)) (exts-◆ σ₂ σ₁)) (subst-◆ (exts σ₂) (exts σ₁) t))
 
 suc-subst-⟨-⟩ˢ-⬖ : (σ : Subst Γ Δ) (x : Γ ∋ τ) → suc-subst {τ = τ₁} σ ⟨ x ⟩ˢ ≡ suc-renaming (idᴿ Δ) ⬖ σ ⟨ x ⟩ˢ
 suc-subst-⟨-⟩ˢ-⬖ (x ∷ σ) Z     = refl

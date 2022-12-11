@@ -115,3 +115,28 @@ t▷⋆t′⇒[t]▶⋆[t′] (inj₂ t▷⁺u) (S x) = inj₁ refl
 σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t (s ∙ t) p = ▷⋆-trans (ξ₁⋆ (σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t s p)) (ξ₂⋆ (σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t t p))
 σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t (abs t) p = ζ⋆ (σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t t (exts-▶⋆ _ _ p))
 
+
+--------------------------------------------------------------------------------
+---- Weak Head Reduction                                                    ----
+--------------------------------------------------------------------------------
+
+rename-▷ʷ : (ρ : Renaming Δ Γ) {t s : Δ ⊢ τ} → t ▷ʷ s → ρ ⟪ t ⟫ ▷ʷ ρ ⟪ s ⟫
+rename-▷ʷ ρ (ξ₁ t▷ʷs) = ξ₁ (rename-▷ʷ ρ t▷ʷs)
+rename-▷ʷ ρ {abs t ∙ s} β = subst (ρ ⟪ abs t ∙ s ⟫ ▷ʷ_) (sym (rename-[] t s ρ)) β
+
+▷ʷ-▷-pseudo-locally-confluent : (t t′ t″ : Γ ⊢ τ) → t ▷ʷ t′ → t ▷ t″ → t′ ≡ t″ ⊎ Σ[ w ∈ Γ ⊢ τ ] (t″ ▷ʷ w × t′ ▷⋆ w)
+▷ʷ-▷-pseudo-locally-confluent .(_ ∙ _)     .(_ ∙ _)   .(_ ∙ _) (ξ₁ r) (ξ₁ s) with ▷ʷ-▷-pseudo-locally-confluent _ _ _ r s
+... | inj₁ refl = inj₁ refl
+... | inj₂ (w ,ˣ r ,ˣ s) = inj₂ (w ∙ _ ,ˣ ξ₁ r ,ˣ ξ₁⋆ s)
+▷ʷ-▷-pseudo-locally-confluent .(_ ∙ _) .(_ ∙ _) .(_ ∙ _) (ξ₁ r) (ξ₂ s) = inj₂ (_ ∙ _ ,ˣ ξ₁ r ,ˣ inj₂ (ξ₂ s ▷⁺end))
+▷ʷ-▷-pseudo-locally-confluent .(abs t₁ ∙ t₂) .(t₁ [ t₂ ]) .(t₁ [ t₂ ])  (β {s = t₁} {t = t₂}) β          = inj₁ refl
+
+▷ʷ-▷-pseudo-locally-confluent .(abs t₁ ∙ t₂) .(t₁ [ t₂ ]) .(abs _ ∙ t₂) (β {s = t₁} {t = t₂}) (ξ₁ (ζ s)) = inj₂ (conf-β-ξ₁ t₁ _ t₂ s)
+  where
+    conf-β-ξ₁ : (t₁ t₁′ : Γ , τ ⊢ τ₂) (t₂ : Γ ⊢ τ) → t₁ ▷ t₁′ → Σ[ w ∈ Γ ⊢ τ₂ ] (abs t₁′ ∙ t₂ ▷ʷ w × t₁ [ t₂ ] ▷⋆ w)
+    conf-β-ξ₁ t₁ t₁′ t₂ x = t₁′ [ t₂ ] ,ˣ β ,ˣ inj₂ (subst-▷⁺ (substOuter t₂) (x ▷⁺end))
+
+▷ʷ-▷-pseudo-locally-confluent .(abs t₁ ∙ t₂) .(t₁ [ t₂ ]) .(abs t₁ ∙ _) (β {s = t₁} {t = t₂}) (ξ₂ s)     = inj₂ (conf-β-ξ₂ t₁ t₂ _ s)
+  where
+    conf-β-ξ₂ : (t₁ : Γ , τ ⊢ τ₂) (t₂ t₂′ : Γ ⊢ τ) → t₂ ▷ t₂′ → Σ[ w ∈ Γ ⊢ τ₂ ] (abs t₁ ∙ t₂′ ▷ʷ w × t₁ [ t₂ ] ▷⋆ w)
+    conf-β-ξ₂ t₁ t₂ t₂′ x = t₁ [ t₂′ ] ,ˣ β ,ˣ σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t t₁ (t▷⋆t′⇒[t]▶⋆[t′] (inj₂ (x ▷⁺end)))

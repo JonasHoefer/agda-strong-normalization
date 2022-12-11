@@ -80,3 +80,22 @@ SN-closed-β-expansion-sn t u (sn t[u]∈SN⁺) (sn u∈SN) (abs s ∙ u′) (ξ
   with σ₁▶⋆σ₂⇒σ₁t▷⋆σ₂t {σ₁ = substOuter u} {σ₂ = substOuter u′} s (t▷⋆t′⇒[t]▶⋆[t′] (inj₂ (u▷u′ ▷⁺end)))
 ... | inj₁ t[u]≡t[u′]  = SN-closed-β-expansion t u′ (subst SN⁺ t[u]≡t[u′] (sn t[u]∈SN⁺)) (u∈SN u′ u▷u′)
 ... | inj₂ t[u]▷⁺t[u′] = SN-closed-β-expansion t u′ (t[u]∈SN⁺ _ t[u]▷⁺t[u′]) (u∈SN u′ u▷u′)
+
+
+--------------------------------------------------------------------------------
+---- Strongly normalizing terms are closed under backwards weak head reduction -
+--------------------------------------------------------------------------------
+
+SN-closed-backwards-▷ʷ : (t t' : Γ ⊢ τ₁ ⇒ τ₂) (u : Γ ⊢ τ₁) → SN t → SN (t' ∙ u) → t ▷ʷ t' → SN (t ∙ u)
+SN-closed-backwards-▷ʷ t t' u t∈SN t′u∈SN t▷ʷt′ = SN-closed-backwards-▷ʷ-helper t t' u t∈SN (SN⊆SN⁺ t′u∈SN) t▷ʷt′
+  where
+    -- again, switching to mututal reccursion makes agda seethrough termination
+    SN-closed-backwards-▷ʷ-helper : (t t′ : Γ ⊢ τ₁ ⇒ τ₂) (u : Γ ⊢ τ₁) → SN t → SN⁺ (t′ ∙ u) → t ▷ʷ t′ → SN (t ∙ u)
+    SN-closed-backwards-▷ʷ-helper-sn : (t t′ : Γ ⊢ τ₁ ⇒ τ₂) (u : Γ ⊢ τ₁) → SN t → SN⁺ (t′ ∙ u) → t ▷ʷ t′ → (r : Γ ⊢ τ₂) → t ∙ u ▷ r → SN r
+    
+    SN-closed-backwards-▷ʷ-helper t t′ u t∈SN tu′∈SN⁺ t▷ʷt′ = sn (SN-closed-backwards-▷ʷ-helper-sn t t′ u t∈SN tu′∈SN⁺ t▷ʷt′)
+    SN-closed-backwards-▷ʷ-helper-sn t t′ u t∈SN      (sn t′u∈SN⁺) t▷ʷt′ (t ∙ u′) (ξ₂ u▷u′) = SN-closed-backwards-▷ʷ-helper t t′ u′ t∈SN (t′u∈SN⁺ (t′ ∙ u′) (ξ₂ u▷u′ ▷⁺end)) t▷ʷt′
+    SN-closed-backwards-▷ʷ-helper-sn t t′ u (sn t∈SN) (sn t′u∈SN⁺) t▷ʷt′ (t″ ∙ u) (ξ₁ t▷t″) with ▷ʷ-▷-pseudo-locally-confluent t t′ t″ t▷ʷt′ t▷t″
+    ... | inj₁ refl = SN⁺⊆SN (sn t′u∈SN⁺)
+    ... | inj₂ (.t′ ,ˣ t″▷t′ ,ˣ inj₁ refl) = SN-closed-backwards-▷ʷ-helper t″ t′ u (t∈SN t″ t▷t″) (sn t′u∈SN⁺) t″▷t′
+    ... | inj₂ (w ,ˣ t″▷w ,ˣ inj₂ t′▷⁺w) = SN-closed-backwards-▷ʷ-helper t″ w u (t∈SN t″ t▷t″) (t′u∈SN⁺ (w ∙ u) (ξ₁⁺ t′▷⁺w)) t″▷w
