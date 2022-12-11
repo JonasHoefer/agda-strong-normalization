@@ -1,4 +1,4 @@
-{-# OPTIONS --without-K #-}
+{-# OPTIONS --safe --without-K #-}
 
 open import Relation.Binary.PropositionalEquality using (_≡_; refl; _≢_; cong; cong₂; cong-app; sym; trans; subst)
 open        Relation.Binary.PropositionalEquality.≡-Reasoning using (begin_; _≡⟨⟩_; step-≡; _∎)
@@ -35,7 +35,7 @@ renaming-⟦ Γ ∶ ⋆ ⟧ ρ t t∈SN = renaming-SN ρ t t∈SN
 renaming-⟦ Γ ∶ τ₁ ⇒ τ₂ ⟧ ρ t t∈⟦Γ∶τ₁⇒τ₂⟧ ρ₁ u u∈⟦Δ:τ₁⟧ = subst (λ - → ⟦ _ ∶ _ ⟧ (- ∙ u)) (rename-◇ ρ₁ ρ t) (t∈⟦Γ∶τ₁⇒τ₂⟧ (ρ₁ ◇ ρ) u u∈⟦Δ:τ₁⟧)
 
 --------------------------------------------------------------------------------
----- NE ⊆ ⟦ Γ ∶ τ ⟧ ⊆ SN                                                     ----
+---- NE ⊆ ⟦ Γ ∶ τ ⟧ ⊆ SN                                                    ----
 --------------------------------------------------------------------------------
 
 -- we show that the predicate predicate solves our problem, i.e., terms satisfying the predicate are strongly normalizing
@@ -67,7 +67,7 @@ NE⊆⟦ Γ ∶ τ₁ ⇒ τ₂ ⟧ t t∈NE ρ u u∈⟦Δ∶τ₂⟧ = NE⊆�
 
 
 --------------------------------------------------------------------------------
----- id∈⟦Γ⟧                                                                  ----
+---- id∈⟦Γ⟧                                                                 ----
 --------------------------------------------------------------------------------
 
 -- An immediate consequence is that the identity substitution satisfies the predicate.
@@ -76,7 +76,7 @@ id∈⟦Γ⟧ Γ x = subst ⟦ Γ ∶ _ ⟧ (sym (subst-id (var x))) (NE⊆⟦ �
 
 
 --------------------------------------------------------------------------------
----- ⟦_∶_⟧ closed under β expansion                                          ----
+---- ⟦_∶_⟧ closed under β expansion                                         ----
 --------------------------------------------------------------------------------
 
 -- We prove a more general fact from which we can conclude the closure under β expansion.
@@ -92,7 +92,7 @@ id∈⟦Γ⟧ Γ x = subst ⟦ Γ ∶ _ ⟧ (sym (subst-id (var x))) (NE⊆⟦ �
 
 
 --------------------------------------------------------------------------------
----- Fundamental theorem for ⟦_⟧                                             ----
+---- Fundamental theorem for ⟦_⟧                                            ----
 --------------------------------------------------------------------------------
 
 theorem : (t : Γ ⊢ τ) (σ : Subst Γ Δ) → ⟦ Γ ⟧ σ → ⟦ Δ ∶ τ ⟧ (σ ⟪ t ⟫ˢ)
