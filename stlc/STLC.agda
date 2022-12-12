@@ -35,8 +35,7 @@ renaming-⟦ Γ ∶ ⋆ ⟧ ρ t t∈SN = renaming-SN ρ t t∈SN
 renaming-⟦ Γ ∶ τ₁ ⇒ τ₂ ⟧ ρ t t∈⟦Γ∶τ₁⇒τ₂⟧ ρ₁ u u∈⟦Δ:τ₁⟧ = subst (λ - → ⟦ _ ∶ _ ⟧ (- ∙ u)) (rename-◇ ρ₁ ρ t) (t∈⟦Γ∶τ₁⇒τ₂⟧ (ρ₁ ◇ ρ) u u∈⟦Δ:τ₁⟧)
 
 --------------------------------------------------------------------------------
----- NE ⊆ ⟦ Γ ∶ τ ⟧ ⊆ SN                                                    ----
---------------------------------------------------------------------------------
+---- NE ⊆ ⟦ Γ ∶ τ ⟧ ⊆ SN
 
 -- we show that the predicate predicate solves our problem, i.e., terms satisfying the predicate are strongly normalizing
 -- we proof the predicate by mutual induction over the type, proving at the same time that all neutral terms satisfy the predicate
@@ -67,8 +66,7 @@ NE⊆⟦ Γ ∶ τ₁ ⇒ τ₂ ⟧ t t∈NE ρ u u∈⟦Δ∶τ₂⟧ = NE⊆�
 
 
 --------------------------------------------------------------------------------
----- id∈⟦Γ⟧                                                                 ----
---------------------------------------------------------------------------------
+---- id∈⟦Γ⟧
 
 -- An immediate consequence is that the identity substitution satisfies the predicate.
 id∈⟦Γ⟧ : (Γ : Ctx) → ⟦ Γ ⟧ (idˢ Γ)
@@ -76,8 +74,7 @@ id∈⟦Γ⟧ Γ x = subst ⟦ Γ ∶ _ ⟧ (sym (subst-id (var x))) (NE⊆⟦ �
 
 
 --------------------------------------------------------------------------------
----- ⟦_∶_⟧ closed under β expansion                                         ----
---------------------------------------------------------------------------------
+---- ⟦_∶_⟧ closed under β expansion
 
 -- We prove a more general fact from which we can conclude the closure under β expansion.
 ⟦_∶_⟧-closed-backwards-▷ʷ : (Γ : Ctx) (τ : Type) (t t′ : Γ ⊢ τ) → ⟦ Γ ∶ τ ⟧ t′ → t ▷ʷ t′ → SN t → ⟦ Γ ∶ τ ⟧ t
@@ -92,8 +89,7 @@ id∈⟦Γ⟧ Γ x = subst ⟦ Γ ∶ _ ⟧ (sym (subst-id (var x))) (NE⊆⟦ �
 
 
 --------------------------------------------------------------------------------
----- Fundamental theorem for ⟦_⟧                                            ----
---------------------------------------------------------------------------------
+---- Fundamental theorem for ⟦_⟧
 
 theorem : (t : Γ ⊢ τ) (σ : Subst Γ Δ) → ⟦ Γ ⟧ σ → ⟦ Δ ∶ τ ⟧ (σ ⟪ t ⟫ˢ)
 theorem (var x) σ σ∈⟦Γ⟧ = σ∈⟦Γ⟧ x
@@ -107,7 +103,7 @@ theorem (abs t) σ σ∈⟦Γ⟧ ρ u u∈⟦Δ∶τ₁⟧ = ⟦-⟧-closed-β-e
     σ′-suc : (x : _ ∋ τ) → ρ ⟪ σ ⟨ x ⟩ˢ ⟫ ≡ σ′ ⟨ S x ⟩ˢ
     σ′-suc x = trans (sym (subst-⬖ ρ σ (var x))) (subst-outer-abs-suc-subst (ρ ⬖ σ) u x)
 
-    -- Thus, we can conclude that σ′ ∈ ⟦Γ , τ₁⟧ because u satisfies the predicate and σ odes as well.
+    -- Thus, we can conclude that σ′ ∈ ⟦Γ , τ₁⟧ because u satisfies the predicate and σ does as well.
     σ′∈⟦Γ⟧ : ⟦ _ ⟧ σ′
     σ′∈⟦Γ⟧ Z     = u∈⟦Δ∶τ₁⟧
     σ′∈⟦Γ⟧ (S x) = subst ⟦ _ ∶ _ ⟧ (σ′-suc x) (renaming-⟦ _ ∶ _ ⟧ ρ (σ ⟨ x ⟩ˢ) (σ∈⟦Γ⟧ x))
@@ -129,8 +125,7 @@ theorem (abs t) σ σ∈⟦Γ⟧ ρ u u∈⟦Δ∶τ₁⟧ = ⟦-⟧-closed-β-e
 
 
 --------------------------------------------------------------------------------
----- STLC is strongly normalizing                                           ----
---------------------------------------------------------------------------------
+---- STLC is strongly normalizing
 
 t∈SN : (t : Γ ⊢ τ) → SN t
 t∈SN t = subst SN (subst-id t) (⟦ _ ∶ _ ⟧⊆SN _ (theorem t (idˢ _) (id∈⟦Γ⟧ _)))
