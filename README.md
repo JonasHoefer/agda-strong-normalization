@@ -9,6 +9,17 @@ A rendered version of the files can be found [here](https://jonashoefer.github.i
 
 # References
 
+- [Thorsten Altenkirch, Bernhard Reus, Monadic Presentations of Lambda Terms Using Generalized Inductive Types. CSL 1999][paper/altenkirch99]
+- [Thorsten Altenkirch, A Formalization of the Strong Normalization Proof for System F in LEGO. TLCA 1993][paper/altenkirch93]
+- [Thorsten Altenkirch, Constructions, inductive types and strong normalization. University of Edinburgh, UK][thesis/altenkirch]
+
+
+# Software
+
+- [Agda][software/agda], Version 2.6.3
+- [Agda Standard Library][software/agda-stdlib]
+
+
 [paper/altenkirch99]:
   http://www.cs.nott.ac.uk/~psztxa/publ/csl99.pdf
   "Thorsten Altenkirch, Bernhard Reus, Monadic Presentations of Lambda Terms Using Generalized Inductive Types. CSL 1999"
