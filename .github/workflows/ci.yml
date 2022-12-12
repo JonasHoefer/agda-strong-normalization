@@ -1,4 +1,4 @@
-name: basic
+name: CI
 on: [push]
 jobs:
   check:
