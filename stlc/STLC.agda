@@ -37,8 +37,8 @@ renaming-⟦ Γ ∶ τ₁ ⇒ τ₂ ⟧ ρ t t∈⟦Γ∶τ₁⇒τ₂⟧ ρ₁ 
 --------------------------------------------------------------------------------
 ---- NE ⊆ ⟦ Γ ∶ τ ⟧ ⊆ SN
 
--- we show that the predicate predicate solves our problem, i.e., terms satisfying the predicate are strongly normalizing
--- we proof the predicate by mutual induction over the type, proving at the same time that all neutral terms satisfy the predicate
+-- we show that the predicate solves our problem, i.e., terms satisfying the predicate are strongly normalizing
+-- we proof the inclusions by mutual induction over the type, proving at the same time that all neutral terms satisfy the predicate
 ⟦_∶_⟧⊆SN : (Γ : Ctx) (τ : Type) (t : Γ ⊢ τ) → ⟦ Γ ∶ τ ⟧ t → SN t
 NE⊆⟦_∶_⟧ : (Γ : Ctx) (τ : Type) (t : Γ ⊢ τ) → NE t → ⟦ Γ ∶ τ ⟧ t
 
