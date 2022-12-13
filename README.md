@@ -16,7 +16,7 @@ A rendered version of the files can be found [here](https://jonashoefer.github.i
 
 # Software
 
-- [Agda][software/agda], Version 2.6.3
+- [Agda][software/agda], Version 2.6.2.2
 - [Agda Standard Library][software/agda-stdlib]
 
 
